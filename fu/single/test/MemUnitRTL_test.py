@@ -36,8 +36,16 @@ class TestHarness(Component):
     s.src_opt = TestSrcRTL(ConfigType, ctrl_msgs)
     s.sink_out = TestSinkRTL(DataType, sink_msgs)
 
-    s.dut = FunctionUnit(DataType, PredicateType, ConfigType,
-                         num_inports, num_outports, data_mem_size)
+    DataAddrType = mk_bits(clog2(data_mem_size))
+    CtrlType = ConfigType
+    ctrl_mem_size = 4 # by default
+    CtrlAddrType = mk_bits(clog2(ctrl_mem_size))
+    CgraPayloadType = mk_cgra_payload(DataType,
+                                      DataAddrType,
+                                      CtrlType,
+                                      CtrlAddrType)
+    s.dut = FunctionUnit(CgraPayloadType,
+                         num_inports, num_outports)
     s.data_mem = DataUnit(DataType, data_mem_size)
 
     connect(s.dut.to_mem_raddr,   s.data_mem.recv_raddr[0])
