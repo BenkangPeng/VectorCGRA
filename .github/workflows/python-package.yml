@@ -8,6 +8,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -85,7 +86,7 @@ jobs:
         mkdir -p build && cd build
         source ${HOME}/venv/bin/activate
         # Simulation across all tests.
-        pytest .. -v --tb=short
+        pytest -n auto .. -v --tb=short
         # CtrlMemDynamicRTL
         pytest ../mem/ctrl/test/CtrlMemDynamicRTL_test.py -xvs
         # Tile translation.
