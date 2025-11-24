@@ -5,7 +5,7 @@ name: Python package
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master" , "CI-test**"]
   pull_request:
     branches: [ "master" ]
 
