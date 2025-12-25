@@ -118,16 +118,34 @@ jobs:
       run: |
         start_time=$(date +%s)
         export PATH="${HOME}/oss-cad-suite/bin:$PATH"
-        cd build
-        cp CgraTemplateRTL__*.v design.v
         export PATH="${{github.workspace}}/tools/sv2v/bin:$PATH"
-        ${{github.workspace}}/tools/sv2v/bin/sv2v design.v > design_sv2v.v
-        cp design_sv2v.v ${{github.workspace}}/tools/mflowgen/designs/cgra/rtl/outputs/design.v
-        cd ${{github.workspace}}/tools/mflowgen
-        mkdir -p build && cd build
-        mflowgen run --design ../designs/cgra
-        make 2
-        make 3
+
+        for cgra_rtl_file in ${{github.workspace}}/build/CgraTemplateRTL__*.v; do
+          if [ ! -f "$cgra_rtl_file" ]; then
+            echo "No files matching pattern found!"
+            continue
+          fi
+
+          filename=$(basename "$cgra_rtl_file")
+          echo "-------------------------------------"
+          echo "Starting synthesis for: $filename"
+          echo "-------------------------------------"
+
+          sv2v "$cgra_rtl_file" > design_sv2v.v
+          cp design_sv2v.v ${{github.workspace}}/tools/mflowgen/designs/cgra/rtl/outputs/design.v
+
+          (
+            cd ${{github.workspace}}/tools/mflowgen
+            rm -rf build/
+            mkdir build && cd build
+
+            mflowgen run --design ../designs/cgra
+            make 2
+            make 3
+          )
+
+        done 
+
         end_time=$(date +%s)
         duration=$((end_time - start_time))
         echo "Synthesis step duration: $duration seconds"
