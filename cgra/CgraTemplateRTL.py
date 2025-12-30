@@ -234,6 +234,70 @@ class CgraTemplateRTL(Component):
           s.tile[dstTileIndex].recv_data[link.dstPort].msg //= DataType(0, 0)
           s.tile[srcTileIndex].send_data[link.srcPort].rdy //= 0
 
+    """
+    y   ^
+        | tile12  tile13 tile14   tile15
+        | tile8   tile9  tile10   tile11
+        | tile4   tile5  tile6    tile7
+        | tile0   tile1  tile2    tile3
+        |--------------------------> x
+    """
+    
+    # for x in range(per_cgra_columns):
+    #   for y in range(per_cgra_rows):
+    #     tile_id = x + y * per_cgra_columns
+
+    #     # the 1st row of tiles.
+    #     if y == per_cgra_rows - 1:
+    #       if is_multi_cgra:
+    #         s.tile[tile_id].send_data[PORT_NORTH] //= s.send_data_on_boundary_north[x]
+    #         s.tile[tile_id].recv_data[PORT_NORTH] //= s.recv_data_on_boundary_north[x]
+    #       else:
+    #         s.tile[tile_id].send_data[PORT_NORTH].rdy //= 0
+    #         s.tile[tile_id].recv_data[PORT_NORTH].val //= 0
+    #         s.tile[tile_id].recv_data[PORT_NORTH].msg //= DataType(0, 0)
+
+    #     # the last row of tiles.
+    #     if y == 0:
+    #       if is_multi_cgra:
+    #         s.tile[tile_id].send_data[PORT_SOUTH] //= s.send_data_on_boundary_south[x]
+    #         s.tile[tile_id].recv_data[PORT_SOUTH] //= s.recv_data_on_boundary_south[x]
+    #       else:
+    #         s.tile[tile_id].send_data[PORT_SOUTH].rdy //= 0
+    #         s.tile[tile_id].recv_data[PORT_SOUTH].val //= 0
+    #         s.tile[tile_id].recv_data[PORT_SOUTH].msg //= DataType(0, 0)
+
+    #     # the 1st column of tiles.
+    #     if x == 0:
+    #       if is_multi_cgra:
+    #         s.tile[tile_id].send_data[PORT_WEST] //= s.send_data_on_boundary_west[y]
+    #         s.tile[tile_id].recv_data[PORT_WEST] //= s.recv_data_on_boundary_west[y]
+    #       else:
+    #         s.tile[tile_id].send_data[PORT_WEST].rdy //= 0
+    #         s.tile[tile_id].recv_data[PORT_WEST].val //= 0
+    #         s.tile[tile_id].recv_data[PORT_WEST].msg //= DataType(0, 0)
+
+    #     if x == per_cgra_columns - 1:
+    #       if is_multi_cgra:
+    #         s.tile[tile_id].send_data[PORT_EAST] //= s.send_data_on_boundary_east[y]
+    #         s.tile[tile_id].recv_data[PORT_EAST] //= s.recv_data_on_boundary_east[y]
+    #       else:
+    #         s.tile[tile_id].send_data[PORT_EAST].rdy //= 0
+    #         s.tile[tile_id].recv_data[PORT_EAST].val //= 0
+    #         s.tile[tile_id].recv_data[PORT_EAST].msg //= DataType(0, 0)
+          
+
+
+
+
+    """
+    row ^
+        | tile12  tile13 tile14   tile15
+        | tile8   tile9  tile10   tile11
+        | tile4   tile5  tile6    tile7
+        | tile0   tile1  tile2    tile3
+        |--------------------------> column
+    """
     if is_multi_cgra:
       for row in range(per_cgra_rows):
         for col in range(per_cgra_columns):
